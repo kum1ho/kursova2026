@@ -1,0 +1,8 @@
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.csproj.AssemblyReference.cache
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.GeneratedMSBuildEditorConfig.editorconfig
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.AssemblyInfoInputs.cache
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.AssemblyInfo.cs
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.csproj.CoreCompileInputs.cache
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.MvcApplicationPartsAssemblyInfo.cs
+D:\Games\123\kursova\PetStoreAPI\obj\Debug\net9.0\PetStoreAPI.MvcApplicationPartsAssemblyInfo.cache

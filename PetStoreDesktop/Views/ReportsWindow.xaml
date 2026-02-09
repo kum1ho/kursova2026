@@ -1,0 +1,188 @@
+<Window x:Class="PetStoreDesktop.Views.ReportsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PetStoreDesktop.Views"
+        xmlns:vm="clr-namespace:PetStoreDesktop.ViewModels"
+        xmlns:conv="clr-namespace:PetStoreDesktop.Converters"
+        mc:Ignorable="d"
+        Title="Звіти про продажі" Height="800" Width="1400"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.DataContext>
+        <vm:ReportsViewModel/>
+    </Window.DataContext>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок та кнопки -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="📊 Звіти про продажі" 
+                       FontSize="20" FontWeight="Bold" 
+                       VerticalAlignment="Center" Margin="0,0,20,0"/>
+            
+            <Button Content="🔄 Оновити" Command="{Binding RefreshCommand}" 
+                    Padding="10,5" Margin="5,0"/>
+            <Button Content="📄 Друк" Command="{Binding PrintReportCommand}" 
+                    Padding="10,5" Margin="5,0"/>
+            <Button Content="📁 Експорт товари CSV" Command="{Binding ExportProductsCsvCommand}" 
+                    Padding="10,5" Margin="5,0"/>
+            <Button Content="📁 Експорт тварини CSV" Command="{Binding ExportAnimalsCsvCommand}" 
+                    Padding="10,5" Margin="5,0"/>
+            <Button Content="🔄 Скинути параметри" Command="{Binding ResetParametersCommand}" 
+                    Padding="10,5" Margin="5,0"/>
+        </StackPanel>
+
+        <!-- Панель параметрів -->
+        <GroupBox Grid.Row="1" Header="Параметри звіту" Margin="0,0,0,10">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <Label Content="Початкова дата:"/>
+                    <DatePicker SelectedDate="{Binding Parameters.StartDate}" 
+                                Margin="0,0,0,5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="5">
+                    <Label Content="Кінцева дата:"/>
+                    <DatePicker SelectedDate="{Binding Parameters.EndDate}" 
+                                Margin="0,0,0,5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Margin="5">
+                    <Label Content="Кількість топ товарів:"/>
+                    <TextBox Text="{Binding Parameters.TopCount}" 
+                             Margin="0,0,0,5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="5">
+                    <Label Content="Категорія:"/>
+                    <ComboBox ItemsSource="{Binding Categories}"
+                              SelectedValue="{Binding Parameters.CategoryId}"
+                              SelectedValuePath="CategoryID"
+                              DisplayMemberPath="CategoryName"
+                              Margin="0,0,0,5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4" Margin="5" VerticalAlignment="Center">
+                    <CheckBox Content="Включати неактивні" 
+                              IsChecked="{Binding Parameters.IncludeInactive}"
+                              Margin="0,0,0,5"/>
+                    <Button Content="📊 Генерувати звіт" 
+                            Command="{Binding GenerateReportCommand}"
+                            Padding="10,8"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <!-- Статистика та статус -->
+        <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Статистика -->
+                <Border Grid.Row="0" Background="#F0F0F0" Padding="10">
+                    <TextBlock Text="{Binding StatisticsText}" 
+                               FontWeight="Bold" 
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <!-- Таблички з даними -->
+                <TabControl Grid.Row="1">
+                    <!-- Топ товари -->
+                    <TabItem Header="🏆 Топ товари">
+                        <DataGrid ItemsSource="{Binding TopProducts}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  IsReadOnly="True"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F8F8F8"
+                                  RowBackground="White">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding ProductID}" Width="50"/>
+                                <DataGridTextColumn Header="Назва товару" Binding="{Binding ProductName}" Width="250"/>
+                                <DataGridTextColumn Header="Категорія" Binding="{Binding CategoryName}" Width="120"/>
+                                <DataGridTextColumn Header="Постачальник" Binding="{Binding SupplierName}" Width="150"/>
+                                <DataGridTextColumn Header="Продано" Binding="{Binding TotalQuantitySold}" Width="80"/>
+                                <DataGridTextColumn Header="Дохід" Binding="{Binding DisplayRevenue}" Width="100"/>
+                                <DataGridTextColumn Header="Середня ціна" Binding="{Binding DisplayAveragePrice}" Width="100"/>
+                                <DataGridTextColumn Header="Замовлень" Binding="{Binding OrderCount}" Width="80"/>
+                                <DataGridTextColumn Header="Перша покупка" Binding="{Binding FirstSaleDate, StringFormat='dd.MM.yyyy'}" Width="100"/>
+                                <DataGridTextColumn Header="Остання покупка" Binding="{Binding LastSaleDate, StringFormat='dd.MM.yyyy'}" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <!-- Продажі тварин -->
+                    <TabItem Header="🐾 Продажі тварин">
+                        <DataGrid ItemsSource="{Binding AnimalSales}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  IsReadOnly="True"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  AlternatingRowBackground="#F8F8F8"
+                                  RowBackground="White">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding AnimalID}" Width="50"/>
+                                <DataGridTextColumn Header="Ім'я" Binding="{Binding AnimalName}" Width="120"/>
+                                <DataGridTextColumn Header="Вид" Binding="{Binding Species}" Width="100"/>
+                                <DataGridTextColumn Header="Порода" Binding="{Binding Breed}" Width="120"/>
+                                <DataGridTextColumn Header="Ціна" Binding="{Binding DisplayPrice}" Width="80"/>
+                                <DataGridTextColumn Header="Дата продажу" Binding="{Binding DisplaySaleDate}" Width="130"/>
+                                <DataGridTextColumn Header="Клієнт" Binding="{Binding CustomerName}" Width="150"/>
+                                <DataGridTextColumn Header="Вік (міс.)" Binding="{Binding AgeMonths}" Width="70"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+
+                    <!-- Графік (заглушка) -->
+                    <TabItem Header="📈 Графік продажів">
+                        <Grid>
+                            <TextBlock Text="Графік продажів буде реалізовано в наступній версії" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center" 
+                                       FontSize="16" 
+                                       Foreground="Gray"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Border>
+
+        <!-- Статусний рядок -->
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <ProgressBar IsIndeterminate="True" 
+                                 Width="20" Height="15" 
+                                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                 Margin="0,0,10,0"/>
+                    <TextBlock Text="{Binding StatusMessage}"/>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
