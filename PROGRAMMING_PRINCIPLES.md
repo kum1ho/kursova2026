@@ -80,5 +80,5 @@ https://github.com/kum1ho/kursova2026/tree/master/PetStoreAPI/Models
 https://github.com/kum1ho/kursova2026/blob/master/petstore_database.sql
 Це забезпечує логічну цілісність даних.
 
-Висновок
+Висновок:
 Використання наведених принципів дозволило створити структурований, зрозумілий та масштабований проєкт, який легко підтримувати та розширювати.
