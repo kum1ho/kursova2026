@@ -1,5 +1,3 @@
-using BCrypt.Net;
-
 namespace PetStoreAPI.Services
 {
     /// <summary>
@@ -24,8 +22,8 @@ namespace PetStoreAPI.Services
                 throw new ArgumentException("Пароль повинен містити щонайменше 6 символів", nameof(password));
 
             // Хешування пароля з автоматичною генерацією солі
-            string hash = BCrypt.HashPassword(password, SaltRounds);
-            
+            string hash = BCrypt.Net.BCrypt.HashPassword(password, SaltRounds);
+
             return hash;
         }
 
@@ -46,7 +44,7 @@ namespace PetStoreAPI.Services
             try
             {
                 // BCrypt автоматично витягує сіль з хешу та перевіряє пароль
-                return BCrypt.Verify(password, hash);
+                return BCrypt.Net.BCrypt.Verify(password, hash);
             }
             catch
             {

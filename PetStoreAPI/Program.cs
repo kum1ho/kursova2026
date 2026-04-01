@@ -18,6 +18,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Додавання сервісів
 builder.Services.AddScoped<PasswordService>();
+builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<SessionService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
